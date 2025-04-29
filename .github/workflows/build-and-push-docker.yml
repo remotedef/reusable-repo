@@ -1,42 +1,29 @@
-# .github/workflows/build-and-push-docker.yml
-name: Build and Push Docker Image to GCP Artifact Registry
+# .github/workflows/call-build-and-push.yml
+name: Call Build and Push Docker Image
 
 on:
-  workflow_call:  # Allow this workflow to be reusable
-    inputs:
-      docker_image_name:
-        required: true
-        type: string
-      docker_tag:
-        required: true
-        type: string
-      gcp_project_id:
-        required: true
-        type: string
-      gcp_region:
-        required: true
-        type: string
+  push:
+    branches:
+      - main  # Trigger when pushing to the main branch
 
 jobs:
-  build-and-push:
+  call-reusable-workflow:
     runs-on: ubuntu-latest
+    environment: production  # Optional, to specify an environment
+
     steps:
-      - name: Checkout the code
+      - name: Set up Google Cloud Credentials as Environment Variable
+        run: echo "GCP_CREDENTIALS=${{ secrets.GCP_CREDENTIALS }}" >> $GITHUB_ENV  # Set secret as environment variable
+
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up Google Cloud CLI
-        uses: google-github-actions/setup-gcloud@v2
+      - name: Call Reusable Workflow from Another Repo
+        uses: username/other-repo/.github/workflows/build-and-push-docker.yml@main  # Reference the remote workflow
         with:
-          project_id: ${{ inputs.gcp_project_id }}
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}  # Now, use the secret directly
-
-      - name: Build Docker Image
-        run: |
-          docker build -t ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} .
-
-      - name: Push Docker Image to Artifact Registry
-        run: |
-          # Set the correct GCP Artifact Registry repository
-          gcloud auth configure-docker ${inputs.gcp_region}-docker.pkg.dev --quiet
-          docker tag ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} ${inputs.gcp_region}-docker.pkg.dev/${{ inputs.gcp_project_id }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
-          docker push ${inputs.gcp_region}-docker.pkg.dev/${{ inputs.gcp_project_id }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
+          docker_image_name: 'my-app'  # Docker image name
+          docker_tag: 'latest'  # Docker image tag
+          gcp_project_id: 'your-gcp-project-id'  # Your GCP Project ID
+          gcp_region: 'us-central1'  # The region where your Artifact Registry is located
+        env:
+          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}  # Pass the secret as environment variable
