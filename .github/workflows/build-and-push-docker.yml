@@ -42,4 +42,4 @@ jobs:
           # Set the correct GCP Artifact Registry repository
           gcloud auth configure-docker asia-south1-docker.pkg.dev --quiet
           docker tag ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} asia-south1-docker.pkg.dev/${{ inputs.gcp_project_id }}/nginx-image/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
-          docker push asia-south1-docker.pkg.dev/${{ inputs.gcp_project_id }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
+          docker push asia-south1-docker.pkg.dev/${{ inputs.gcp_project_id }}/nginx-image/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
