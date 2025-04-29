@@ -29,7 +29,11 @@ jobs:
         with:
           project_id: ${{ inputs.gcp_project_id }}
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}  # Access secret passed from calling workflow
-
+      
+      - name: Secrets Echo
+        run: |
+          echo "GCP_PROJECT_ID = ${{ secrets.GCP_PROJECT_ID }}"
+      
       - name: Build Docker Image
         run: |
           docker build -t ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} .
