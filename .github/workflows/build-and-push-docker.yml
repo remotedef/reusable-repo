@@ -1,0 +1,35 @@
+# .github/workflows/build-and-push-docker.yml
+name: Build and Push Docker Image to GCP Artifact Registry
+
+on:
+  workflow_call:
+    inputs:
+      docker_image_name:
+        required: true
+        type: string
+      docker_tag:
+        required: true
+        type: string
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}  # Reference the GCP Project ID from GitHub Secrets
+          credentials_json: ${{ secrets.GCP_CREDENTIALS_JSON }}  # Reference the GCP Credentials JSON from GitHub Secrets
+
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} .
+
+      - name: Push Docker Image to Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet  # Use region from secret
+          docker tag ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
