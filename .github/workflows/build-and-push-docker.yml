@@ -16,9 +16,6 @@ on:
       gcp_region:
         required: true
         type: string
-      gcp_service_account_key:  # Optional, can pass via secrets if needed
-        required: true
-        type: string
 
 jobs:
   build-and-push:
@@ -31,7 +28,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ inputs.gcp_project_id }}
-          credentials_json: ${{ env.GCP_CREDENTIALS }}
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}  # Now, use the secret directly
 
       - name: Build Docker Image
         run: |
@@ -40,6 +37,6 @@ jobs:
       - name: Push Docker Image to Artifact Registry
         run: |
           # Set the correct GCP Artifact Registry repository
-          gcloud auth configure-docker asia-south1-docker.pkg.dev --quiet
-          docker tag ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} asia-south1-docker.pkg.dev/${{ inputs.gcp_project_id }}/nginx-image/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
-          docker push asia-south1-docker.pkg.dev/${{ inputs.gcp_project_id }}/nginx-image/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
+          gcloud auth configure-docker ${inputs.gcp_region}-docker.pkg.dev --quiet
+          docker tag ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} ${inputs.gcp_region}-docker.pkg.dev/${{ inputs.gcp_project_id }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
+          docker push ${inputs.gcp_region}-docker.pkg.dev/${{ inputs.gcp_project_id }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
