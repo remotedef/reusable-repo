@@ -10,17 +10,19 @@ on:
       docker_tag:
         required: true
         type: string
-      gcp_project_id:
-        required: true
-        type: string
-      gcp_region:
-        required: true
-        type: string
+      #gcp_project_id:
+        #required: true
+        #type: string
+      #gcp_region:
+        #required: true
+        #type: string
         
     secrets:
       GCP_PROJECT_ID:
         required: true
       GCP_REGION:
+        required: true
+      GCP_CREDENTIALS:
         required: true
 
 jobs:
@@ -33,7 +35,7 @@ jobs:
       - name: Set up Google Cloud CLI
         uses: google-github-actions/setup-gcloud@v2
         with:
-          project_id: ${{ inputs.gcp_project_id }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}  # Access secret passed from calling workflow
       
       - name: Secrets Echo
@@ -47,6 +49,6 @@ jobs:
       - name: Push Docker Image to Artifact Registry
         run: |
           # Set the correct GCP Artifact Registry repository
-          gcloud auth configure-docker ${inputs.gcp_region}-docker.pkg.dev --quiet
-          docker tag ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} ${inputs.gcp_region}-docker.pkg.dev/${{ inputs.gcp_project_id }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
-          docker push ${inputs.gcp_region}-docker.pkg.dev/${{ inputs.gcp_project_id }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
+          gcloud auth configure-docker ${{ secrets.GCP_REGION}}-docker.pkg.dev --quiet
+          docker tag ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} ${{ secrets.GCP_REGION}}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
+          docker push ${{ secrets.GCP_REGION}}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
