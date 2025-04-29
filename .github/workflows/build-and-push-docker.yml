@@ -28,7 +28,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ inputs.gcp_project_id }}
-          credentials_json: ${{ env.GCP_CREDENTIALS }}  # Use the environment variable for credentials
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}  # Use the environment variable for the credentials
 
       - name: Build Docker Image
         run: |
