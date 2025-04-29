@@ -16,6 +16,12 @@ on:
       gcp_region:
         required: true
         type: string
+        
+    secrets:
+      GCP_PROJECT_ID:
+        required: true
+      GCP_REGION:
+        required: true
 
 jobs:
   build-and-push:
