@@ -2,13 +2,13 @@ name: Build and Push Docker Image to GCP Artifact Registry
 
 on:
   workflow_call:  # Allow this workflow to be reusable
-    inputs:
-      docker_image_name:
-        required: true
-        type: string
-      docker_tag:
-        required: true
-        type: string
+    #inputs:
+      #docker_image_name:
+      #  required: true
+      #  type: string
+      #docker_tag:
+      #  required: true
+      #  type: string
     secrets:
       GCP_PROJECT_ID:
         required: true
