@@ -32,11 +32,11 @@ jobs:
       - name: Authenticate to GCP using Workload Identity Federation
         uses: google-github-actions/auth@v2
         with:
-          #credentials_json: ${{ secrets.GCP_GITHUB_TOKEN }}
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          workload_identity_provider: 'projects/894328320839/locations/global/workloadIdentityPools/github-actions-pool/providers/github-oidc-provider'
-          service_account: 'github-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
-          audience: 'https://iam.googleapis.com/'
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+          #project_id: ${{ secrets.GCP_PROJECT_ID }}
+          #workload_identity_provider: 'projects/894328320839/locations/global/workloadIdentityPools/github-actions-pool/providers/github-oidc-provider'
+          #service_account: 'github-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
+          #audience: 'https://iam.googleapis.com/'
 
       # Step 2: Set up Google Cloud CLI
       - name: Set up Google Cloud CLI
@@ -55,5 +55,8 @@ jobs:
         run: |
           # Set the correct GCP Artifact Registry repository
           gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
-          docker tag ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
-          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
+          docker tag my-app:latest ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/my-app:latest
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/my-app:latest
+          #docker tag ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
+          #docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
+            
