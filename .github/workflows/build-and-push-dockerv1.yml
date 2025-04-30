@@ -29,9 +29,9 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_GITHUB_TOKEN }}
-          workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-oidc-provider'
-          service_account: 'github-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
-          audience: 'https://iam.googleapis.com/'
+          #workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-oidc-provider'
+          #service_account: 'github-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
+          #audience: 'https://iam.googleapis.com/'
 
       # Step 2: Set up Google Cloud CLI
       - name: Set up Google Cloud CLI
