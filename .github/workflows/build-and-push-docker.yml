@@ -27,11 +27,14 @@ jobs:
         
       # Step 1: Authenticate with Google Cloud using Workload Identity Federation
       - name: Set up authentication for GCP using Workload Identity Federation
-        uses: google-github-actions/auth@v0
+        uses: google-github-actions/auth@v1
         with:
+          workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-oidc-provider'  # Federated identity provider path
+          service_account: 'projects/${{ secrets.GCP_PROJECT_ID }}/serviceAccounts/github-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'  # Service account to impersonate
+          audience: 'https://sts.googleapis.com'  # Audience for the ID token
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           #credentials: ${{ secrets.GCP_GITHUB_TOEKN }}  # Use GitHub token for WIF authentication
-          federated_credentials: 'projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-oidc-provider'  # Federated credentials path
+          #federated_credentials: 'projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-oidc-provider'  # Federated credentials path
 
       # Step 2: Set up Google Cloud SDK (gcloud)
       - name: Set up Google Cloud SDK
