@@ -14,8 +14,8 @@ on:
         required: true
       GCP_REGION:
         required: true
-      GCP_GITHUB_TOKEN:
-        required: true
+      #GCP_GITHUB_TOKEN:
+        #required: true
       
 jobs:
   build-and-push:
