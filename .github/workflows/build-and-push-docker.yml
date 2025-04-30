@@ -30,7 +30,7 @@ jobs:
         uses: google-github-actions/auth@v0
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          credentials: ${{ secrets.GCP_GITHUB_TOEKN }}  # Use GitHub token for WIF authentication
+          #credentials: ${{ secrets.GCP_GITHUB_TOEKN }}  # Use GitHub token for WIF authentication
           federated_credentials: 'projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-oidc-provider'  # Federated credentials path
 
       # Step 2: Set up Google Cloud SDK (gcloud)
