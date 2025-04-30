@@ -26,7 +26,7 @@ jobs:
 
       # Step 1: Authenticate to GCP using Workload Identity Federation
       - name: Authenticate to GCP using Workload Identity Federation
-        uses: google-github-actions/auth@v2  # Use v1 for proper support
+        uses: google-github-actions/auth@v0.4.0  
         with:
           workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-oidc-provider'
           service_account: 'github-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
