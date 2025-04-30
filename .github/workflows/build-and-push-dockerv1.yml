@@ -23,13 +23,14 @@ jobs:
     
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Step 1: Authenticate to GCP using Workload Identity Federation
       - name: Authenticate to GCP using Workload Identity Federation
-        uses: google-github-actions/auth@v1
+        uses: google-github-actions/auth@v2
         with:
           #credentials_json: ${{ secrets.GCP_GITHUB_TOKEN }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
           workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-oidc-provider'
           service_account: 'github-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
           audience: 'https://iam.googleapis.com/'
