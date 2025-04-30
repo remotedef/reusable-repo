@@ -1,4 +1,4 @@
-name: Build and Push Docker Image to GCP Artifact Registry
+sname: Build and Push Docker Image to GCP Artifact Registry
 
 on:
   push:
@@ -39,7 +39,7 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          workload_identity_provider: 'principalSet://iam.googleapis.com/projects/894328320839/locations/global/workloadIdentityPools/github-actions-pool-v1/attribute.repository_owner/remotedef'
+          workload_identity_provider: 'principalSet://iam.googleapis.com/projects/894328320839/locations/global/workloadIdentityPools/github-actions-pool-v1/providers/github-oidc-provider'
           service_account: 'github-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
           #audience: 'https://iam.googleapis.com/'
           #credentials_json: ${{ secrets.GCP_CREDENTIALS }}
