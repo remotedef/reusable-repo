@@ -22,11 +22,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Step 1: Authenticate to GCP using Workload Identity Federation
       - name: Authenticate to GCP using Workload Identity Federation
-        uses: google-github-actions/auth@v0.4.0  
+        uses: google-github-actions/auth@v1 
         with:
           workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-oidc-provider'
           service_account: 'github-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
@@ -35,7 +35,7 @@ jobs:
 
       # Step 2: Set up Google Cloud CLI
       - name: Set up Google Cloud CLI
-        uses: google-github-actions/setup-gcloud@v2
+        uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           install_components: 'gcloud'
