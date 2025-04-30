@@ -1,19 +1,23 @@
 name: Build and Push Docker Image to GCP Artifact Registry
 
 on:
-  workflow_call:  # Allow this workflow to be reusable
-    inputs:
-      docker_image_name:
-        required: true
-        type: string
-      docker_tag:
-        required: true
-        type: string
-    secrets:
-      GCP_PROJECT_ID:
-        required: true
-      GCP_REGION:
-        required: true
+  on:
+  push:
+    branches:
+      - main  # Trigger when pushing to the main branch
+  #workflow_call:  # Allow this workflow to be reusable
+    #inputs:
+      #docker_image_name:
+        #required: true
+        #type: string
+      #docker_tag:
+        #required: true
+        #type: string
+    #secrets:
+      #GCP_PROJECT_ID:
+        #required: true
+      #GCP_REGION:
+        #required: true
       #GCP_GITHUB_TOKEN:
         #required: true
       
