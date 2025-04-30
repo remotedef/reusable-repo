@@ -2,13 +2,13 @@ name: Build and Push Docker Image to GCP Artifact Registry
 
 on:
   workflow_call:  # Allow this workflow to be reusable
-    #inputs:
-      #docker_image_name:
-      #  required: true
-      #  type: string
-      #docker_tag:
-      #  required: true
-      #  type: string
+    inputs:
+      docker_image_name:
+        required: true
+        type: string
+      docker_tag:
+        required: true
+        type: string
     secrets:
       GCP_PROJECT_ID:
         required: true
@@ -48,17 +48,9 @@ jobs:
           docker build -t ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} .
 
       # Step 4: Push Docker Image to Artifact Registry
-      #- name: Push Docker Image to Artifact Registry
-      #  run: |
-      #    # Set the correct GCP Artifact Registry repository
-      #    gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
-      #    docker tag ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
-      #    docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
-
-      # Step 4: Push Docker Image to Artifact Registry
       - name: Push Docker Image to Artifact Registry
         run: |
           # Set the correct GCP Artifact Registry repository
           gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
-          docker tag my-app:${{ inputs.docker_tag }} ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/my-app:latest
-          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/my-app:latest
+          docker tag ${{ inputs.docker_image_name }}:${{ inputs.docker_tag }} ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ inputs.docker_image_name }}:${{ inputs.docker_tag }}
