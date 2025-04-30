@@ -26,16 +26,16 @@ jobs:
 
       # Step 1: Authenticate to GCP using Workload Identity Federation
       - name: Authenticate to GCP using Workload Identity Federation
-        uses: google-github-actions/auth@v1 
+        uses: google-github-actions/auth@v0.4.0
         with:
+          credentials_json: ${{ secrets.GCP_GITHUB_TOKEN }}
           workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-oidc-provider'
           service_account: 'github-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
           audience: 'https://iam.googleapis.com/'
-          credentials_json: ${{ secrets.GCP_GITHUB_TOKEN }}
 
       # Step 2: Set up Google Cloud CLI
       - name: Set up Google Cloud CLI
-        uses: google-github-actions/setup-gcloud@v1
+        uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           install_components: 'gcloud'
